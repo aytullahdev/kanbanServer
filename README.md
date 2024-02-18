@@ -89,7 +89,7 @@
   }
   ```
 
-### PUT /board
+### POST /board
 
 - **Description:** Create a new task for the authenticated user.
 - **Middleware:** `isValidUser`
@@ -112,6 +112,24 @@
   {
     "message": "Error creating tasks!",
     "status": 500
+  }
+  ```
+### PUT /board
+
+- **Description:** Update an existing task for the authenticated user.
+- **Middleware:** `isValidUser`
+- **Request Body:**
+  ```json
+  {
+    "title": "Updated Task Title",
+    "status": "Updated Task Status",
+    "task_id": 123
+  }
+  ```
+  ```
+  {
+  "message": "Task updated!",
+  "status": 200
   }
   ```
 
