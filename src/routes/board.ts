@@ -9,7 +9,7 @@ boardRoute
     const email = c.get("user");
 
     // Connect to the database
-    const client = await connectToDatabase();
+    const client = await connectToDatabase(c);
     const query = "SELECT * FROM tasks WHERE user_email = $1";
     const values = [email];
     try {
@@ -34,7 +34,7 @@ boardRoute
       });
     }
     // Connect to the database
-    const client = await connectToDatabase();
+    const client = await connectToDatabase(c);
     const query =
       "INSERT INTO tasks (title, status, user_email) VALUES ($1, $2, $3)";
 
@@ -66,7 +66,7 @@ boardRoute
       });
     }
     // Connect to the database
-    const client = await connectToDatabase();
+    const client = await connectToDatabase(c);
     const query =
       "UPDATE tasks SET status = $1, title = $2 WHERE task_id = $3 AND user_email = $4";
 
@@ -94,7 +94,7 @@ boardRoute
     }
 
     // Connect to the database
-    const client = await connectToDatabase();
+    const client = await connectToDatabase(c);
     const query = "DELETE FROM tasks WHERE task_id = $1 AND user_email = $2";
 
     const values = [task_id, email];

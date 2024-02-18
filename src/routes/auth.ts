@@ -17,7 +17,7 @@ authRoute
         status: 400,
       });
     }
-    const client = await connectToDatabase();
+    const client = await connectToDatabase(c);
 
     const query =
       "SELECT * FROM users WHERE email = $1 AND password_hash = $2 ";
@@ -53,7 +53,7 @@ authRoute
       });
     }
     //TODO: Hash the password
-    const client = await connectToDatabase();
+    const client = await connectToDatabase(c);
     const query =
       "INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING *";
     const values = [email, password];
