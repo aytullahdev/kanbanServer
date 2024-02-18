@@ -1,17 +1,4 @@
-Certainly! Below is a Markdown representation of the provided code, including the endpoints and validations:
-
 ## Authentication Routes
-
-### GET /auth
-
-- **Description:** Check if the authentication service is running.
-- **Middleware:** None
-- **Response:**
-  ```json
-  {
-    "message": "Auth service is running!"
-  }
-  ```
 
 ### POST /auth/login
 
