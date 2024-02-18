@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts"
+    "deploy": "wrangler deploy --minify src/index.ts --name kanbanserver"
   },
   "dependencies": {
     "@tsndr/cloudflare-worker-jwt": "^2.4.5",
