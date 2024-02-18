@@ -10,7 +10,7 @@ authRoute
   .post("/login", async (c: Context) => {
     const { email, password }: { email: string; password: string } =
       await c.req.parseBody();
-
+    console.log(email, password);
     if (!email || !password) {
       return c.json({
         message: "Email and password are required!",
