@@ -22,7 +22,7 @@ boardRoute
       });
     }
   })
-  .put("/", async (c: any) => {
+  .post("/", async (c: any) => {
     const email = c.get("user");
     const { title, status }: { title: string; status: string } =
       await c.req.parseBody();
@@ -42,6 +42,38 @@ boardRoute
     try {
       const result: QueryResultRow = await client.query(query, values);
       return c.json({ message: "Task created!", status: 201 });
+    } catch (error) {
+      console.log(error);
+      return c.json({
+        message: "Error creating tasks!",
+        status: 500,
+      });
+    }
+  })
+  .put("/", async (c: any) => {
+    const email = c.get("user");
+    const {
+      title,
+      status,
+      task_id,
+    }: { title: string; status: string; task_id: number } =
+      await c.req.parseBody();
+
+    if (!title || !status || !task_id) {
+      return c.json({
+        message: "Title and column are required!",
+        status: 400,
+      });
+    }
+    // Connect to the database
+    const client = await connectToDatabase();
+    const query =
+      "UPDATE tasks SET status = $1, title = $2 WHERE task_id = $3 AND user_email = $4";
+
+    const values = [status, title, task_id, email];
+    try {
+      const result: QueryResultRow = await client.query(query, values);
+      return c.json({ message: "Task updated!", status: 200 });
     } catch (error) {
       console.log(error);
       return c.json({
