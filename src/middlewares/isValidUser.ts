@@ -5,7 +5,11 @@ interface MyPayload {
   email: string;
 }
 export default async function isValidUser(c: any, next: Next) {
+  if (c.req.method === "OPTIONS") {
+    next();
+  }
   try {
+    console.log(c.req);
     const token = c.req.header("authorization").split(" ")[1];
     if (!token) {
       return c.json({ message: "Invalid user!" }, 401);
