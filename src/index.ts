@@ -6,9 +6,18 @@ import { cors } from "hono/cors";
 
 const app = new Hono();
 
+app.use(
+  "*",
+  cors({
+    origin: "http://localhost:3000",
+    allowMethods: ["POST", "PUT", "DELETE", "GET", "PATCH", "OPTIONS"],
+    maxAge: 600,
+    credentials: true,
+  })
+);
 // Middleware to check if the user is valid
+
 app.use("/board/*", isValidUser);
-app.use(cors());
 
 // Routes
 app.route("/auth", authRoute);

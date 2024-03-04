@@ -11,6 +11,7 @@ authRoute
     const { email, password }: { email: string; password: string } =
       await c.req.parseBody();
     console.log(email, password);
+
     if (!email || !password) {
       return c.json({
         message: "Email and password are required!",
@@ -35,6 +36,8 @@ authRoute
       }
       // generate jwt token
       const token = await jwt.sign({ email: email }, c.env.JWT_SECRET);
+      // set cookie in the response
+      c.header("Set-Cookie", `token=${token}; HttpOnly; Path=/; Secure;`);
       return c.json({ token: token, email: email });
     } catch (error) {
       console.log(error);

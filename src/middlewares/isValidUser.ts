@@ -1,16 +1,13 @@
 import jwt from "@tsndr/cloudflare-worker-jwt";
 import { Next } from "hono";
+import { getCookie } from "hono/cookie";
 // Define a type or interface for your payload
 interface MyPayload {
   email: string;
 }
 export default async function isValidUser(c: any, next: Next) {
-  if (c.req.method === "OPTIONS") {
-    next();
-  }
   try {
-    console.log(c.req);
-    const token = c.req.header("authorization").split(" ")[1];
+    const token = getCookie(c, "token");
     if (!token) {
       return c.json({ message: "Invalid user!" }, 401);
     }
