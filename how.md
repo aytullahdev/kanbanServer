@@ -1,7 +1,3 @@
-
-Here's a breakdown of your questions in Markdown format suitable for GitHub markdown files:
-
-
 ### 1) How to set Cookie Header?
 
 ```javascript
