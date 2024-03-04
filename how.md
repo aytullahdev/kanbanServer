@@ -1,18 +1,27 @@
-1) How to set Cookie Header?
-    c.header("Set-Cookie", `token=${token}; HttpOnly; Path=/; Secure;`);
-   
-3) How to recive Cookie From Header?
-    const token = getCookie(c, "token");
-   
-4) How to Impliment IsValiduser MiddleWare?
 
+Here's a breakdown of your questions in Markdown format suitable for GitHub markdown files:
+
+
+### 1) How to set Cookie Header?
+
+```javascript
+c.header("Set-Cookie", `token=${token}; HttpOnly; Path=/; Secure;`);
+```
+
+### 2) How to receive Cookie From Header?
+
+```javascript
+const token = getCookie(c, "token");
+```
+
+### 3) How to Implement IsValidUser Middleware?
+
+```javascript
 interface MyPayload {
   email: string;
 }
+
 export default async function isValidUser(c: any, next: Next) {
-  if (c.req.method === "OPTIONS") {
-    next();
-  }
   try {
     const token = getCookie(c, "token");
     if (!token) {
@@ -35,39 +44,14 @@ export default async function isValidUser(c: any, next: Next) {
     return c.json({ message: "Invalid user!" }, 401);
   }
 }
+```
 
-export default async function isValidUser(c: any, next: Next) {
-  
-  if (c.req.method === "OPTIONS") {
-    next();
-  }
-  try {
-    const token = getCookie(c, "token");
-    if (!token) {
-      return c.json({ message: "Invalid user!" }, 401);
-    }
-    const isValid = await jwt.verify(token, c.env.JWT_SECRET);
-    if (!isValid) {
-      return c.json({ message: "Invalid user!" }, 401);
-    }
+### 4) How to connect Database?
 
-    const { payload } = jwt.decode<MyPayload>(token);
-
-    if (!payload?.email) {
-      return c.json({ message: "Invalid user!" }, 401);
-    }
-
-    c.set("user", payload.email);
-    await next();
-  } catch (error) {
-    return c.json({ message: "Invalid user!" }, 401);
-  }
-}
-
-5) How to connect Database?
-
+```javascript
 import { Context } from "hono";
 import { Client } from "pg";
+
 const connectToDatabase = async (c: Context) => {
   try {
     const client = new Client(c.env.DB_URL);
@@ -79,16 +63,24 @@ const connectToDatabase = async (c: Context) => {
 };
 
 export default connectToDatabase;
+```
 
-6) How to get the env variable?
-   c.env.JWT_SECRET
+### 5) How to get the env variable?
 
-7) How I handle Priflight CORS error?
-   if (c.req.method === "OPTIONS") {
-    next();
+```javascript
+c.env.JWT_SECRET
+```
 
-  }
-  # Also Use cors
-  
-  import { cors } from "hono/cors";
-  app.use(cors());
+### 6) How to handle Preflight CORS error?
+
+```javascript
+app.use(
+  "*",
+  cors({
+    origin: "http://localhost:3000",
+    allowMethods: ["POST", "PUT", "DELETE", "GET", "PATCH", "OPTIONS"],
+    maxAge: 600,
+    credentials: true,
+  })
+);
+```
