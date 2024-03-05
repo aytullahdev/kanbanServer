@@ -10,7 +10,6 @@ authRoute
   .post("/login", async (c: Context) => {
     const { email, password }: { email: string; password: string } =
       await c.req.parseBody();
-    console.log(email, password);
 
     if (!email || !password) {
       return c.json({
@@ -40,7 +39,6 @@ authRoute
       c.header("Set-Cookie", `token=${token}; HttpOnly; Path=/; Secure;`);
       return c.json({ token: token, email: email });
     } catch (error) {
-      console.log(error);
       return c.json({
         message: "Error logging in!",
         status: 500,
@@ -69,6 +67,13 @@ authRoute
         status: 500,
       });
     }
+  })
+  .post("/logout", (c) => {
+    c.header(
+      "Set-Cookie",
+      "token=; HttpOnly; Path=/; Secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT;"
+    );
+    return c.json({ message: "Signout successful!" });
   })
   .post("/reset-password", (c) => {
     return c.json({ message: "Password reset successful!" });
