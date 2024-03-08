@@ -15,7 +15,6 @@ app.use(
     allowMethods: ["POST", "PUT", "DELETE", "GET", "PATCH", "OPTIONS"],
     maxAge: 600,
     credentials: true,
-    
   })
 );
 // Middleware to check if the user is valid

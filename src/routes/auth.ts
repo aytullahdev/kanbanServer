@@ -36,7 +36,12 @@ authRoute
       // generate jwt token
       const token = await jwt.sign({ email: email }, c.env.JWT_SECRET);
       // set cookie in the response
-      c.header("Set-Cookie", `token=${token}; HttpOnly; Path=/; Secure;`);
+      c.header(
+        "Set-Cookie",
+        `token=${token}; HttpOnly; Max-Age=${
+          60 * 60
+        };  Path=/; Secure; SameSite=None;`
+      );
       return c.json({ token: token, email: email });
     } catch (error) {
       return c.json({
