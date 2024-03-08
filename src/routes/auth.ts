@@ -40,7 +40,7 @@ authRoute
         "Set-Cookie",
         `token=${token}; HttpOnly; Max-Age=${
           60 * 60
-        };  Path=/; Secure; SameSite=None;`
+        };  Path=/; SameSite=None;  Secure; `
       );
       return c.json({ token: token, email: email });
     } catch (error) {
@@ -76,7 +76,7 @@ authRoute
   .post("/logout", (c) => {
     c.header(
       "Set-Cookie",
-      "token=; HttpOnly; Path=/; Secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT;"
+      "token=; HttpOnly; Path=/; SameSite=None; Secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT;"
     );
     return c.json({ message: "Signout successful!" });
   })
