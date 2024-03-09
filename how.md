@@ -103,3 +103,35 @@ pnpm wrangler d1 execute  kanbanboard --local --file=./src/schema/schema.sql
 npx wrangler d1 execute kanbanboard --local --command="SELECT * FROM Customers"
 ```
 <img width="904" alt="Screenshot 2024-03-09 at 9 23 18 PM" src="https://github.com/aytullahdev/kanbanServer/assets/139336931/bd4f9ded-a731-43d6-bbc2-3794e215444c">
+
+## Querry With Worker
+```
+export interface Env {
+  // If you set another name in wrangler.toml as the value for 'binding',
+  // replace "DB" with the variable name you defined.
+  DB: D1Database;
+}
+
+export default {
+  async fetch(request: Request, env: Env) {
+    const { pathname } = new URL(request.url);
+
+    if (pathname === "/api/beverages") {
+      // If you did not use `DB` as your binding name, change it here
+      const { results } = await env.DB.prepare(
+        "SELECT * FROM Customers WHERE CompanyName = ?"
+      )
+        .bind("Bs Beverages")
+        .all();
+      return Response.json(results);
+    }
+
+    return new Response(
+      "Call /api/beverages to see everyone who works at Bs Beverages"
+    );
+  },
+};
+```
+<img width="735" alt="Screenshot 2024-03-09 at 9 32 40 PM" src="https://github.com/aytullahdev/kanbanServer/assets/139336931/dbe953e1-a03b-4ce7-b096-42cc01ad950e">
+<img width="464" alt="Screenshot 2024-03-09 at 9 33 04 PM" src="https://github.com/aytullahdev/kanbanServer/assets/139336931/8e75739d-106c-4724-94b5-bea98d9559fe">
+
