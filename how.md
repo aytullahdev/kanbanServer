@@ -105,7 +105,7 @@ npx wrangler d1 execute kanbanboard --local --command="SELECT * FROM Customers"
 <img width="904" alt="Screenshot 2024-03-09 at 9 23 18 PM" src="https://github.com/aytullahdev/kanbanServer/assets/139336931/bd4f9ded-a731-43d6-bbc2-3794e215444c">
 
 ## Querry With Worker
-```
+```javascript
 export interface Env {
   // If you set another name in wrangler.toml as the value for 'binding',
   // replace "DB" with the variable name you defined.
