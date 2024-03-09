@@ -1,6 +1,4 @@
 import { Hono } from "hono";
-import connectToDatabase from "../controllers/databaseConnection";
-import { QueryResultRow } from "pg";
 
 const boardRoute = new Hono();
 
@@ -8,13 +6,14 @@ boardRoute
   .get("/", async (c: any) => {
     const email = c.get("user");
 
-    // Connect to the database
-    const client = await connectToDatabase(c);
-    const query = "SELECT * FROM tasks WHERE user_email = $1";
-    const values = [email];
     try {
-      const result = await client.query(query, values);
-      return c.json({ tasks: result.rows });
+      // Query the database
+      const { results } = await c.env.DB.prepare(
+        "SELECT * FROM tasks WHERE user_email = ? "
+      )
+        .bind(email)
+        .all();
+      return c.json({ tasks: results });
     } catch (error) {
       return c.json({
         message: "Error fetching tasks!",
@@ -33,17 +32,16 @@ boardRoute
         status: 400,
       });
     }
-    // Connect to the database
-    const client = await connectToDatabase(c);
-    const query =
-      "INSERT INTO tasks (title, status, user_email) VALUES ($1, $2, $3)";
 
-    const values = [title, status, email];
     try {
-      const result: QueryResultRow = await client.query(query, values);
+      // Query the database
+      const { results } = await c.env.DB.prepare(
+        "INSERT INTO tasks (title, status, user_email) VALUES (?, ?, ?) "
+      )
+        .bind(title, status, email)
+        .all();
       return c.json({ message: "Task created!", status: 201 });
     } catch (error) {
-      console.log(error);
       return c.json({
         message: "Error creating tasks!",
         status: 500,
@@ -65,17 +63,17 @@ boardRoute
         status: 400,
       });
     }
-    // Connect to the database
-    const client = await connectToDatabase(c);
-    const query =
-      "UPDATE tasks SET status = $1, title = $2 WHERE task_id = $3 AND user_email = $4";
 
-    const values = [status, title, task_id, email];
     try {
-      const result: QueryResultRow = await client.query(query, values);
+      // Query the database
+      const { results } = await c.env.DB.prepare(
+        "UPDATE tasks SET status = ?, title = ? WHERE task_id = ? AND user_email = ?"
+      )
+        .bind(status, title, task_id, email)
+        .all();
+
       return c.json({ message: "Task updated!", status: 200 });
     } catch (error) {
-      console.log(error);
       return c.json({
         message: "Error creating tasks!",
         status: 500,
@@ -93,14 +91,13 @@ boardRoute
       });
     }
 
-    // Connect to the database
-    const client = await connectToDatabase(c);
-    const query = "DELETE FROM tasks WHERE task_id = $1 AND user_email = $2";
-
-    const values = [task_id, email];
     try {
-      const result: QueryResultRow = await client.query(query, values);
-
+      // Query the database
+      const { results } = await c.env.DB.prepare(
+        "DELETE FROM tasks WHERE task_id = ? AND user_email = ?"
+      )
+        .bind(task_id, email)
+        .all();
       return c.json({ message: "Task deleted!", status: 200 });
     } catch (error) {
       console.log(error);
