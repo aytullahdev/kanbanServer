@@ -74,14 +74,8 @@ authRoute
       )
         .bind(email, password)
         .all();
-      const userData = results[0];
-      if (!userData) {
-        return c.json({
-          message: "Error creating user!",
-          status: 500,
-        });
-      }
-      return c.json(userData, 201);
+
+      return c.json({ message: "user created" }, 201);
     } catch (error) {
       return c.json({
         message: "Error creating user!",
